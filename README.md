@@ -266,21 +266,5 @@ project_root/
 
 ---
 
-## Known Issues & Notes
-
-1. **`pe.a_ip` port is unconnected internally.** The `A[]` weight registers inside each PE are never written through the `a_ip` input — the write logic is missing. Testbenches use `force`/`release` to work around this. The `a_ip` port should be connected to an internal write path triggered by a dedicated load signal.
-
-2. **`pe_array` x_bus wiring bug.** `x_bus[3]` is assigned `x_bus_3` (same signal as index 2) rather than `x_bus_4`. This means PE(2,1) and PE(2,0) see the same input, producing incorrect convolution results for the third output row.
-
-3. **`psum_trasnmitter` next-state bug.** The next-state logic uses `next_state` instead of `state_reg` in the case statement — effectively making it combinational self-assignment. The correct pattern is `case(state_reg)` for the present state.
-
-4. **`comp_core_v1_3x3` signal mismatches.** Several internal signals (`valid_from_fifo_y`, `done_load_w` in the pe_array_fsm instance) reference undeclared or inconsistently named wires. These will cause compile errors and need reconciliation.
-
-5. **`updt_y_fsm` undeclared wire.** `done_temp_2` is assigned but never declared — add `wire done_temp_2;`.
-
-6. **`top_mod` incomplete.** References `async_fifo`, `valid` (undeclared), `int8_rd_data` (undeclared), `wr_data` (undeclared), and `rd_data` (undeclared). The module is a structural skeleton requiring these to be fully wired.
-
----
-
 
 
